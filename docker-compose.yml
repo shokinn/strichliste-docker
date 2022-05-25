@@ -3,7 +3,7 @@ version: '3.9'
 services:
   # Strichliste Frontend
   frontend:
-    image: "ghcr.io/shokinn/strichliste-docker/frontend:${DOCKER_STRICHLISTE_VERSION_TAG}"
+    image: "ghcr.io/shokinn/strichliste-frontend:${DOCKER_STRICHLISTE_VERSION_TAG}"
     labels:
       traefik.enable: 'true'
       traefik.http.routers.${DOCKER_NAME}.entrypoints: websecure
@@ -26,7 +26,7 @@ services:
   
   # Strichlise backend
   backend:
-    image: "ghcr.io/shokinn/strichliste-docker/backend:${DOCKER_STRICHLISTE_VERSION_TAG}"
+    image: "ghcr.io/shokinn/strichliste-backend:${DOCKER_STRICHLISTE_VERSION_TAG}"
     user: '1000'
     volumes:
       - ./config/services.yaml:/var/www/strichliste/config/services.yaml
