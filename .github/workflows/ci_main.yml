@@ -47,8 +47,11 @@ jobs:
             GIT_REF_NAME=${{ github.ref }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest-frontend
-            ghcr.io/${{ github.repository }}:${{ env.VERSION }}-frontend
+            ghcr.io/${{ github.repository_owner }}/strichliste-frontend:latest
+            ghcr.io/${{ github.repository_owner }}/strichliste-frontend:${{ env.VERSION }}
+          # tags: |
+          #   ghcr.io/${{ github.repository }}:latest-frontend
+          #   ghcr.io/${{ github.repository }}:${{ env.VERSION }}-frontend
       
       - name: Build and push backend
         uses: docker/build-push-action@v3
@@ -62,5 +65,8 @@ jobs:
             GIT_REF_NAME=${{ github.ref }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest-backend
-            ghcr.io/${{ github.repository }}:${{ env.VERSION }}-backend
+            ghcr.io/${{ github.repository_owner }}/strichliste-backend:latest
+            ghcr.io/${{ github.repository_owner }}/strichliste-backend:${{ env.VERSION }}
+          # tags: |
+          #   ghcr.io/${{ github.repository }}:latest-backend
+          #   ghcr.io/${{ github.repository }}:${{ env.VERSION }}-backend
