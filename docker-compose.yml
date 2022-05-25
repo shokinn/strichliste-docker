@@ -1,0 +1,94 @@
+version: '3.9'
+
+services:
+  # Strichliste Frontend
+  frontend:
+    image: "ghcr.io/shokinn/strichliste-docker/frontend:${DOCKER_STRICHLISTE_VERSION_TAG}"
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.${DOCKER_NAME}.entrypoints: websecure
+      traefik.http.routers.${DOCKER_NAME}.rule: Host(`${DOCKER_NAME}.${DOCKER_DEFAULT_SERVICE_DOMAIN}`)
+      traefik.http.routers.${DOCKER_NAME}.tls.certresolver: le_production
+      traefik.http.services.${DOCKER_NAME}.loadbalancer.server.port: '8080'
+    environment:
+      - "APP_ENV:prod"
+      - MARIADB_USER=${DOCKER_MARIADB_USER}
+      - MARIADB_PASSWORD=${DOCKER_MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${DOCKER_MARIADB_DATABASE}
+      - MARIADB_HOST=${DOCKER_MARIADB_HOST}
+    restart: unless-stopped
+    hostname: ${DOCKER_NAME}.${DOCKER_DEFAULT_SERVICE_DOMAIN}
+    ports:
+      - "8080:8080"
+    networks:
+      - reverse_proxy
+      - frontend
+  
+  # Strichlise backend
+  backend:
+    image: "ghcr.io/shokinn/strichliste-docker/backend:${DOCKER_STRICHLISTE_VERSION_TAG}"
+    user: '1000'
+    volumes:
+      - ./config/services.yaml:/var/www/strichliste/config/services.yaml
+      - ./config/strichliste.yaml:/var/www/strichliste/config/strichliste.yaml
+      - ./config/doctrine.yaml:/var/www/strichliste/config/packages/doctrine.yaml
+    environment:
+      - "APP_ENV:prod"
+      - MARIADB_USER=${DOCKER_MARIADB_USER}
+      - MARIADB_PASSWORD=${DOCKER_MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${DOCKER_MARIADB_DATABASE}
+      - MARIADB_HOST=${DOCKER_MARIADB_HOST}
+      - DATABASE_URL=mysql://${DOCKER_MARIADB_USER}:${DOCKER_MARIADB_PASSWORD}@${DOCKER_MARIADB_HOST}/${DOCKER_MARIADB_DATABASE}
+    restart: unless-stopped
+    networks:
+      - frontend
+      - db
+  
+  # Strichlise database
+  database:
+    image: "mariadb:${DOCKER_DB_VERSION_TAG}"
+    volumes:
+      - strichlistedb:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DOCKER_MARIADB_ROOT_PASSWORD}
+      - MARIADB_USER=${DOCKER_MARIADB_USER}
+      - MARIADB_PASSWORD=${DOCKER_MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${DOCKER_MARIADB_DATABASE}
+      - MARIADB_HOST=${DOCKER_MARIADB_HOST}
+    restart: unless-stopped
+    networks:
+      - db  
+
+
+volumes:
+  strichlistedb:
+
+
+networks:
+  reverse_proxy:
+    driver: bridge
+    ipam:
+      driver: default
+    labels:
+      com.docker.network.bridge.name: docker2
+      com.docker.network.bridge.enable_ip_masquerade: true
+      com.docker.network.bridge.enable_icc: true
+      com.docker.network.driver.mtu: 1500
+  frontend:
+    driver: bridge
+    ipam:
+      driver: default
+    labels:
+      com.docker.network.bridge.name: docker2
+      com.docker.network.bridge.enable_ip_masquerade: true
+      com.docker.network.bridge.enable_icc: true
+      com.docker.network.driver.mtu: 1500
+  db:
+    driver: bridge
+    ipam:
+      driver: default
+    labels:
+      com.docker.network.bridge.name: docker2
+      com.docker.network.bridge.enable_ip_masquerade: true
+      com.docker.network.bridge.enable_icc: true
+      com.docker.network.driver.mtu: 1500
