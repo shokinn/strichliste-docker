@@ -1,4 +1,4 @@
-name: ci
+name: Weekly builds
 
 on:
   # Triggers the workflow every Sunday at 23:42
