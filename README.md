@@ -33,7 +33,3 @@ docker build -t ghcr.io/shokinn/strichliste-docker/backend:develop -f ./docker/b
 ```bash
 docker compose exec -T database mariadb sh -c 'exec mysqldump --all-databases -uroot -p"${MARIADB_ROOT_PASSWORD}"' > mariadb-dump-$(date +%F_%H-%M-%S).sql
 ```
-
-
-
---arg BUILD_DATE=$(date --rfc-3339=seconds | sed 's/ /T/')
