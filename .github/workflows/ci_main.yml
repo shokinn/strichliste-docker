@@ -6,8 +6,12 @@ on:
       - 'main'
 
 jobs:
-  docker:
+  build-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -37,14 +41,14 @@ jobs:
           context: ${{ github.workspace }}
           file: ${{ github.workspace }}/docker/frontend.Dockerfile
           build-args: |
+            APP_VERSION=${{ env.VERSION }}
             BUILD_DATE=${{ env.BUILD_DATE }}
-            strichliste_version=${{ env.VERSION }}
             BUILD_REV=${{ github.sha }}
             GIT_REF_NAME=${{ github.ref }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/frontend:latest
-            ghcr.io/${{ github.repository }}/frontend:${{ env.VERSION }}
+            ghcr.io/${{ github.repository }}:latest-frontend
+            ghcr.io/${{ github.repository }}:${{ env.VERSION }}-frontend
       
       - name: Build and push backend
         uses: docker/build-push-action@v3
@@ -52,11 +56,11 @@ jobs:
           context: ${{ github.workspace }}
           file: ${{ github.workspace }}/docker/backend.Dockerfile
           build-args: |
+            APP_VERSION=${{ env.VERSION }}
             BUILD_DATE=${{ env.BUILD_DATE }}
-            strichliste_version=${{ env.VERSION }}
             BUILD_REV=${{ github.sha }}
             GIT_REF_NAME=${{ github.ref }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/backend:latest
-            ghcr.io/${{ github.repository }}/backend:${{ env.VERSION }}
+            ghcr.io/${{ github.repository }}:latest-backend
+            ghcr.io/${{ github.repository }}:${{ env.VERSION }}-backend
