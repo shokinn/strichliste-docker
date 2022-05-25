@@ -29,23 +29,32 @@ jobs:
         run: |
           VER=$(cat VERSION)
           echo "VERSION=$VER" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date --rfc-3339=seconds | sed 's/ /T/')" >> $GITHUB_ENV
 
       - name: Build and push frontend
         uses: docker/build-push-action@v3
         with:
           context: ${{ env.BASE_DIR }}
           file: ${{ env.BASE_DIR }}/docker/frontend.Dockerfile
+          build-args: |
+            BUILD_DATE=${{ env.BUILD_DATE }}
+            strichliste_version=${{ env.VERSION }}
+            BUILD_REV=${{ GITHUB_SHA }}
+            GIT_REF_NAME=${{ GITHUB_REF }}
           push: true
           tags: |
-            ghcr.io/${{ env.USER }}/${{ env.REPO }}/frontend:latest
-            ghcr.io/${{ env.USER }}/${{ env.REPO }}/frontend:${{ env.VERSION }}
+            ghcr.io/${{ GITHUB_REPOSITORY }}/frontend:${{ env.VERSION }}
       
       - name: Build and push backend
         uses: docker/build-push-action@v3
         with:
           context: ${{ env.BASE_DIR }}
           file: ${{ env.BASE_DIR }}/docker/backend.Dockerfile
+          build-args: |
+            BUILD_DATE=${{ env.BUILD_DATE }}
+            strichliste_version=${{ env.VERSION }}
+            BUILD_REV=${{ GITHUB_SHA }}
+            GIT_REF_NAME=${{ GITHUB_REF }}
           push: true
           tags: |
-            ghcr.io/${{ env.USER }}/${{ env.REPO }}/backend:latest
-            ghcr.io/${{ env.USER }}/${{ env.REPO }}/backend:${{ env.VERSION }}
+            ghcr.io/${{ GITHUB_REPOSITORY }}/backend:${{ env.VERSION }}

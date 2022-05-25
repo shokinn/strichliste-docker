@@ -25,6 +25,7 @@ FROM php:7.4-fpm
 ARG BUILD_DATE='1970-01-01T00:00:00+00:00'
 ARG strichliste_version='v1.7.1'
 ARG BUILD_REV=''
+ARG GIT_REF_NAME=''
 
 LABEL "org.opencontainers.image.authors"="Philip Henning <mail@philip-henning.com>"
 LABEL "org.opencontainers.image.created"="${BUILD_DATE}"
@@ -35,6 +36,7 @@ LABEL "org.opencontainers.image.version"="${strichliste_version}"
 LABEL "org.opencontainers.image.revision"="${BUILD_REV}"
 LABEL "org.opencontainers.image.vendor"="Philip Henning <mail@philip-henning.com>"
 LABEL "org.opencontainers.image.licenses"="MIT"
+LABEL "org.opencontainers.image.ref.name"="${GIT_REF_NAME}"
 LABEL "org.opencontainers.image.title"="Strichliste backend"
 LABEL "org.opencontainers.image.description"="Strichliste's backend container based on php-fpm"
 LABEL "org.opencontainers.image.base.name"="hub.docker.com/_/php:7.4-fpm"
