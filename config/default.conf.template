@@ -1,6 +1,6 @@
 server {
-    listen       8080;
-    server_name  localhost;
+    listen       8080 default_server;
+    server_name  _;
     access_log /var/log/nginx/scripts.log scripts;
     root /var/www/strichliste/public;
 
