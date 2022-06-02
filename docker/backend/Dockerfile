@@ -61,7 +61,7 @@ COPY --from=build /source .
 
 RUN chown -R 1000:1000 ${app_dir}
 
-COPY docker/backend_entrypoint.sh /entrypoint.sh
+COPY docker/backend/entrypoint.sh /entrypoint.sh
 
 RUN chown 1000:1000 /entrypoint.sh \
     && chmod 500 /entrypoint.sh

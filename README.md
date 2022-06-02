@@ -26,20 +26,20 @@ A [Strichliste](https://github.com/strichliste) docker-compose base on nginx's u
 ### Build and run whole stack locally
 
 ```bash
-docker build -t ghcr.io/shokinn/strichliste-frontend:develop -f ./docker/frontend.Dockerfile . \
-    && docker build -t ghcr.io/shokinn/strichliste-backend:develop -f ./docker/backend.Dockerfile . \
+docker build -t ghcr.io/shokinn/strichliste-frontend:develop -f ./docker/frontend/Dockerfile . \
+    && docker build -t ghcr.io/shokinn/strichliste-backend:develop -f ./docker/backend/Dockerfile . \
     && docker compose up
 ```
 
 ### Build container independently
 Frontend:  
 ```bash
-docker build -t ghcr.io/shokinn/strichliste-frontend:develop -f ./docker/frontend.Dockerfile .
+docker build -t ghcr.io/shokinn/strichliste-frontend:develop -f ./docker/frontend/Dockerfile .
 ```
 
 Backend:  
 ```bash
-docker build -t ghcr.io/shokinn/strichliste-backend:develop -f ./docker/backend.Dockerfile .
+docker build -t ghcr.io/shokinn/strichliste-backend:develop -f ./docker/backend/Dockerfile .
 ```
 
 ## Backups

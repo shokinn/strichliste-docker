@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}
-          file: ${{ github.workspace }}/docker/frontend.Dockerfile
+          file: ${{ github.workspace }}/docker/frontend/Dockerfile
           build-args: |
             APP_VERSION=${{ env.VERSION }}
             BUILD_DATE=${{ env.BUILD_DATE }}
@@ -61,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}
-          file: ${{ github.workspace }}/docker/backend.Dockerfile
+          file: ${{ github.workspace }}/docker/backend/Dockerfile
           build-args: |
             APP_VERSION=${{ env.VERSION }}
             BUILD_DATE=${{ env.BUILD_DATE }}
