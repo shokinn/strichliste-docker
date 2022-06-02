@@ -10,6 +10,7 @@ on:
       - '**.md'
       - '.env'
       - 'docker-compose.yml'
+      - 'docker/backup/**'
 
 
 jobs:
