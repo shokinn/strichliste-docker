@@ -4,12 +4,17 @@ services:
   # Strichliste Frontend
   frontend:
     image: "ghcr.io/shokinn/strichliste-frontend:${DOCKER_STRICHLISTE_VERSION_TAG}"
+    # This docker-compose does not include a traefik container,
+    # however a configuration through labels is provided for ease of use when it's deployed with traefik.
     labels:
       traefik.enable: 'true'
-      traefik.http.routers.${DOCKER_NAME}.entrypoints: websecure
-      traefik.http.routers.${DOCKER_NAME}.rule: Host(`${DOCKER_NAME}.${DOCKER_DEFAULT_SERVICE_DOMAIN}`)
-      traefik.http.routers.${DOCKER_NAME}.tls.certresolver: le_production
-      traefik.http.services.${DOCKER_NAME}.loadbalancer.server.port: '8080'
+      traefik.docker.network: strichliste-docker_frontend # You have to specify the exact name of the network here as shown by `docker network ls`.
+      traefik.http.routers.strichliste.entrypoints: websecure # Define your own https entrypoint here.
+      traefik.http.routers.strichliste.rule: Host(`${DOCKER_NAME}.${DOCKER_DEFAULT_SERVICE_DOMAIN}`)
+      traefik.http.routers.strichliste.tls: 'true'
+      traefik.http.routers.strichliste.tls.certresolver: le_production # Define your own cert resolver here.
+      traefik.http.services.strichliste.loadbalancer.server.scheme: http
+      traefik.http.services.strichliste.loadbalancer.server.port: '8080'
     environment:
       - "APP_ENV:prod"
       - MARIADB_USER=${DOCKER_MARIADB_USER}
