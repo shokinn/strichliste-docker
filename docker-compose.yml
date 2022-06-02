@@ -28,6 +28,8 @@ services:
     networks:
       - reverse_proxy
       - frontend
+    depends_on:
+      - backend
   
   # Strichlise backend
   backend:
@@ -48,6 +50,9 @@ services:
     networks:
       - frontend
       - db
+    depends_on:
+      database:
+        condition: service_healthy
   
   # Strichlise database
   database:
@@ -60,13 +65,38 @@ services:
       - MARIADB_PASSWORD=${DOCKER_MARIADB_PASSWORD}
       - MARIADB_DATABASE=${DOCKER_MARIADB_DATABASE}
       - MARIADB_HOST=${DOCKER_MARIADB_HOST}
+      - MARIADB_MYSQL_LOCALHOST_USER=y
     restart: unless-stopped
     networks:
-      - db  
+      - db
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+
+# Database backup
+  db-backup:
+    build: ./docker/backup
+    environment:
+      MYSQL_CONTAINER_NAME: database
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MARIADB_ROOT_PASSWORD}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - strichlistedb_backup:/db_backups # Change the hostpath to a directory where you want to store your backups
+    restart: unless-stopped
+    networks:
+      - db 
+    depends_on:
+      database:
+        condition: service_healthy
 
 
 volumes:
   strichlistedb:
+  strichlistedb_backup:
 
 
 networks:
