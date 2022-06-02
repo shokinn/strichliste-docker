@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - 'main'
+    paths-ignore:
+      - '.github/dependabot.yml'
+      - 'LICENSE'
+      - '**.md'
+      - '.env'
+      - 'docker-compose.yml'
+
 
 jobs:
   build-push:
