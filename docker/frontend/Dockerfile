@@ -14,9 +14,9 @@ RUN apt-get update \
 RUN mkdir /source
 WORKDIR /source
 
-RUN curl -Lo strichliste.tar.gz https://github.com/strichliste/strichliste/releases/download/${APP_VERSION}/strichliste.tar.gz \
-    && tar xfz strichliste.tar.gz \
-    && rm -r strichliste.tar.gz
+RUN curl -Lo strichliste-${APP_VERSION}.tar.gz https://github.com/strichliste/strichliste/releases/download/${APP_VERSION}/strichliste-${APP_VERSION}.tar.gz \
+    && tar xfz strichliste-${APP_VERSION}.tar.gz \
+    && rm -r strichliste-${APP_VERSION}.tar.gz
 
 
 
