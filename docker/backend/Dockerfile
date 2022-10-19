@@ -2,7 +2,7 @@ FROM debian:stable as build
 
 # You can get the latest version from here:
 # https://github.com/strichliste/strichliste
-ARG APP_VERSION='v1.7.1'
+ARG APP_VERSION='v1.8.2'
 
 RUN apt-get update \
     && apt-get install -y \
@@ -20,9 +20,9 @@ RUN curl -Lo strichliste.tar.gz https://github.com/strichliste/strichliste/relea
 
 
 
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
-ARG APP_VERSION='v1.7.1'
+ARG APP_VERSION='v1.8.2'
 ARG BUILD_DATE='1970-01-01T00:00:00+00:00'
 ARG BUILD_REV=''
 ARG GIT_REF_NAME=''

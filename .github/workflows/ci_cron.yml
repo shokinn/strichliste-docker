@@ -11,6 +11,7 @@ jobs:
       matrix:
         refs:
           - refs/tags/v1.7.1
+          - refs/tags/v1.8.2
 
     runs-on: ubuntu-latest
     steps:
